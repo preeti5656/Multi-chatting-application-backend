@@ -14,8 +14,20 @@ io.on('connection', (socket) => {
   //do all operation after connection here
   socket.on('sendmsg',(msg)=>{
     console.log(msg);
-    socket.broadcast.emit('recmsg',msg);
+    msg.sent = false;
+    socket.to(msg.room).emit('recmsg',msg);
   });
+
+
+  socket.on('joinroom', (roomname) => {
+    console.log(roomname);
+    socket.join(roomname);
+  })
+  
+  socket.on('leaveroom', (roomname) => {
+    console.log(roomname);
+    socket.leave(roomname);
+  })
 });
 
 const port = 5000;
